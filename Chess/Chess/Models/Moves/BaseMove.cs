@@ -16,7 +16,7 @@ namespace Chess.Models.Moves
             List<ChessPiece> myPieces, 
             List<ChessPiece> opponentPieces)
         {
-            bool isValid = true;
+            bool isValid = false;
             foreach (int multiplier in this.AllowedMultipliers)
             {
                 int checkedX = piece.X + (this.XMove * multiplier);
@@ -27,11 +27,15 @@ namespace Chess.Models.Moves
                 }
                 if(checkedX != newX || checkedY != newY)
                 {
-                    // check that no piece is blocking the move
-                    if(myPieces.Any(x => x.Id != piece.Id && x.X == checkedX && x.Y == checkedY)
-                        || opponentPieces.Any(x => x.X == checkedX && x.Y == checkedY))
+                    // we only do this check if we can move multiple spaces
+                    if (this.AllowedMultipliers.Any(x => x != 1 && x != -1))
                     {
-                        isValid = false;
+                        // check that no piece is blocking the move
+                        if (myPieces.Any(x => x.Id != piece.Id && x.X == checkedX && x.Y == checkedY)
+                            || opponentPieces.Any(x => x.X == checkedX && x.Y == checkedY))
+                        {
+                            return false;
+                        }
                     }
                 }
                 else
@@ -44,16 +48,13 @@ namespace Chess.Models.Moves
                     }
                     else
                     {
-                        var existingOpponent = opponentPieces.FirstOrDefault(x => x.X == checkedX && x.Y == checkedY);
-                        if(MustCapture && existingOpponent == null)
+                        var existingOpponent = opponentPieces.Any(x => x.X == checkedX && x.Y == checkedY);
+                        if(MustCapture && !existingOpponent)
                         {
                             isValid = false;
                             break;
                         }
-                        if(existingOpponent != null)
-                        {
-                            opponentPieces.Remove(existingOpponent);
-                        }
+                        return true;
                     }
                 }
             }

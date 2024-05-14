@@ -18,19 +18,23 @@ namespace Chess.Services
             this.gameMapper = gameMapper;
         }
 
+        private PieceColor GetNextPlayer(Game game)
+        {
+            return game.PlayerList.First(x => x.Color != game.Turn).Color;
+        }
+
         public GameDTO CreateGame(int player1Id, int player2Id)
         {
             if(player1Id == player2Id)
             {
-                throw new Exception("Player Ids must be different");
+                throw new DuplicateIdException("Player Ids must be different");
             }
             Player player1 = new Player(player1Id, PieceColor.White);
             Player player2 = new Player(player2Id, PieceColor.Black);
             Game game = new Game
             {
                 Id = Guid.NewGuid(),
-                Player1 = player1,
-                Player2 = player2,
+                PlayerList = new List<Player> { player1, player2 },
                 Turn = PieceColor.Black
             };
             DataStore.Games.Add(game);
@@ -61,10 +65,23 @@ namespace Chess.Services
         {
             var game = GetGameById(gameId);
             var player = playerService.GetPlayerById(game, playerId);
+            if(player.Color != game.Turn)
+            {
+                throw new NotYourTurnException("It's the other player's turn");
+            }
             var opponent = playerService.GetOpponentById(game, playerId);
             var piece = GetPiece(player, pieceX, pieceY);
             piece.Move(newX, newY, player.Pieces, opponent.Pieces);
+            game.Turn = GetNextPlayer(game);
             return gameMapper.MapGameToDTO(game);
+        }
+
+        public bool IsCheckSituation(Guid gameId)
+        {
+            var game = GetGameById(gameId);
+            var currentPlayer = playerService.GetCurrentPlayer(game);
+            var opponentPlayer = playerService.GetOpponentById(game, currentPlayer.Id);
+            return currentPlayer.IsCheckSituation(opponentPlayer);
         }
     }
 }

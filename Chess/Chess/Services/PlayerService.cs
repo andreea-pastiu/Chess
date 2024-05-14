@@ -7,28 +7,33 @@ namespace Chess.Services
     {
         public Player GetPlayerById(Game game, int playerId)
         {
-            if (game.Player1.Id == playerId)
+            var player = game.PlayerList.FirstOrDefault(x => x.Id == playerId);
+            if (player == null)
             {
-                return game.Player1;
+                throw new PlayerNotFoundException($"No player with id {playerId} in game {game.Id}");
             }
-            if (game.Player2.Id == playerId)
+            else
             {
-                return game.Player2;
+                return player;
             }
-            throw new PlayerNotFoundException($"No player with id {playerId} in game {game.Id}");
         }
 
         public Player GetOpponentById(Game game, int playerId)
         {
-            if (game.Player1.Id == playerId)
+            var otherPlayers = game.PlayerList.Where(x => x.Id != playerId);
+            if(otherPlayers.Count() > 1)
             {
-                return game.Player2;
+                throw new PlayerNotFoundException($"No player with id {playerId} in game {game.Id}");
             }
-            if (game.Player2.Id == playerId)
+            else
             {
-                return game.Player1;
+                return otherPlayers.First();
             }
-            throw new PlayerNotFoundException($"No player with id {playerId} in game {game.Id}");
+        }
+
+        public Player GetCurrentPlayer(Game game)
+        {
+            return game.PlayerList.First(x => x.Color == game.Turn);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Chess.Models.Moves;
+﻿using Chess.Exceptions;
+using Chess.Models.Moves;
 
 namespace Chess.Models.Pieces
 {
@@ -7,6 +8,7 @@ namespace Chess.Models.Pieces
         public int Id { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public string Letter { get; set; }
         public PieceColor Color { get; set; }
         public List<BaseMove> AllowedMoves { get; set; }
 
@@ -23,16 +25,29 @@ namespace Chess.Models.Pieces
             List<ChessPiece> myPieces,
             List<ChessPiece> opponentPieces)
         {
-            foreach(var move in AllowedMoves)
+            var allowedMove = this.AllowedMoves.Any(x => x.IsValid(this, newX, newY, myPieces, opponentPieces));
+            if(allowedMove)
             {
-                if(move.IsValid(this, newX, newY, myPieces, opponentPieces))
-                {
-                    this.X = newX;
-                    this.Y = newY;
-                    return true;
-                }
+                throw new MoveNotAllowedException("Illegal move");
             }
-            return false;
+            else
+            {
+                var existingOpponent = opponentPieces.FirstOrDefault(x => x.X == newX && x.Y == newY);
+                if(existingOpponent != null)
+                {
+                    opponentPieces.Remove(existingOpponent);
+                }
+                this.X = newX;
+                this.Y = newY;
+                return true;
+            }
+        }
+
+        public bool CheckSituation(King king, 
+            List<ChessPiece> myPieces,
+            List<ChessPiece> opponentPieces)
+        {
+            return this.AllowedMoves.Any(x => x.IsValid(this, king.X, king.Y, myPieces, opponentPieces));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Chess.DTOs.Requests;
+using Chess.Exceptions;
 using Chess.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,43 @@ namespace Chess.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] CreateGameRequest createGameRequest)
         {
-            var game = gameService.CreateGame(createGameRequest.Player1Id, createGameRequest.Player2Id);
-            return Ok(game);
+            try
+            {
+                var game = gameService.CreateGame(createGameRequest.Player1Id, createGameRequest.Player2Id);
+                return Ok(game);
+            }
+            catch(DuplicateIdException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPost("movePiece")]
         public IActionResult MovePiece([FromBody] MovePieceRequest movePieceRequest)
         {
-            var game = gameService.MovePiece(movePieceRequest.GameId, movePieceRequest.PlayerId, movePieceRequest.PieceX, movePieceRequest.PieceY, movePieceRequest.NewX, movePieceRequest.NewY);
-            return Ok(game);
+            try
+            {
+                var game = gameService.MovePiece(movePieceRequest.GameId, movePieceRequest.PlayerId, movePieceRequest.PieceX, movePieceRequest.PieceY, movePieceRequest.NewX, movePieceRequest.NewY);
+                return Ok(game);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("isCheckSituation")]
+        public IActionResult IsCheckSituation(Guid gameId)
+        {
+            try
+            {
+                var game = gameService.IsCheckSituation(gameId);
+                return Ok(game);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

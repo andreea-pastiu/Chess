@@ -10,31 +10,30 @@ namespace Chess.NewFolder
             GameDTO gameDTO = new GameDTO();
             gameDTO.Id = game.Id;
             gameDTO.Turn = game.Turn;
-            gameDTO.Board = new int[8][]
+            gameDTO.Board = new string[8][]
             {
-                new int[8],
-                new int[8],
-                new int[8],
-                new int[8],
-                new int[8],
-                new int[8],
-                new int[8],
-                new int[8],
+                new string[8],
+                new string[8],
+                new string[8],
+                new string[8],
+                new string[8],
+                new string[8],
+                new string[8],
+                new string[8],
             };
             for(int i = 0; i < 8; i++)
             {
                 for(int j = 0; j < 8; j++)
                 {
-                    gameDTO.Board[i][j] = -1;
+                    gameDTO.Board[i][j] = "-1";
                 }
             }
-            foreach(var piece in game.Player1.Pieces)
+            foreach(var player in game.PlayerList)
             {
-                gameDTO.Board[piece.Y][piece.X] = piece.Id;
-            }
-            foreach (var piece in game.Player2.Pieces)
-            {
-                gameDTO.Board[piece.Y][piece.X] = piece.Id;
+                foreach(var piece in player.Pieces)
+                {
+                    gameDTO.Board[piece.Y][piece.X] = $"{piece.Letter}{piece.Id}";
+                }
             }
             return gameDTO;
         }

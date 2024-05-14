@@ -6,6 +6,7 @@ namespace Chess.Models.Pieces
     {
         public Knight(int id, int x, int y, PieceColor color): base(id, x, y, color)
         {
+            this.Letter = "N";
             this.AllowedMoves = new List<BaseMove>
             {
                 new BaseMove
@@ -17,10 +18,24 @@ namespace Chess.Models.Pieces
                 },
                 new BaseMove
                 {
+                    XMove = -2,
+                    YMove = 1,
+                    AllowedMultipliers = new List<int>{ -1, 1},
+                    MustCapture = false
+                },
+                new BaseMove
+                {
                     XMove = 1,
                     YMove = 2,
                     AllowedMultipliers = new List<int>{ -1, 1},
-                    MustCapture = true
+                    MustCapture = false
+                },
+                new BaseMove
+                {
+                    XMove = -1,
+                    YMove = 2,
+                    AllowedMultipliers = new List<int>{ -1, 1},
+                    MustCapture = false
                 },
             };
         }

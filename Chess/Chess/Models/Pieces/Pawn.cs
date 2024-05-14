@@ -6,6 +6,7 @@ namespace Chess.Models.Pieces
     {
         public Pawn(int id, int x, int y, PieceColor color): base(id, x, y, color)
         {
+            this.Letter = "P";
             this.AllowedMoves = new List<BaseMove>
             {
                 new PawnMove

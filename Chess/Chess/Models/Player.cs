@@ -6,6 +6,7 @@ namespace Chess.Models
     {
         public int Id { get; set; }
         public List<ChessPiece> Pieces { get; set; }
+        public PieceColor Color { get; set; }
 
         public Player(int id, PieceColor pieceColor)
         {
@@ -29,6 +30,12 @@ namespace Chess.Models
                 new Pawn(pieceColor == PieceColor.White ? 14 : 30, 6, pieceColor == PieceColor.White ? 1 : 6, pieceColor),
                 new Pawn(pieceColor == PieceColor.White ? 15 : 31, 7, pieceColor == PieceColor.White ? 1 : 6, pieceColor),
             };
+        }
+
+        public bool IsCheckSituation(Player opponent)
+        {
+            var opponentKing = opponent.Pieces.OfType<King>().FirstOrDefault();
+            return this.Pieces.Any(x => x.CheckSituation(opponentKing, this.Pieces, opponent.Pieces));
         }
     }
 }
