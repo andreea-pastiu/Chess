@@ -25,7 +25,7 @@ namespace Chess.Models.Moves
                 {
                     continue;
                 }
-                if(checkedX != newX && checkedY != newY)
+                if(checkedX != newX || checkedY != newY)
                 {
                     // check that no piece is blocking the move
                     if(myPieces.Any(x => x.Id != piece.Id && x.X == checkedX && x.Y == checkedY)

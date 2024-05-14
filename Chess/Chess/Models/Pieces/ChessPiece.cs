@@ -27,6 +27,8 @@ namespace Chess.Models.Pieces
             {
                 if(move.IsValid(this, newX, newY, myPieces, opponentPieces))
                 {
+                    this.X = newX;
+                    this.Y = newY;
                     return true;
                 }
             }

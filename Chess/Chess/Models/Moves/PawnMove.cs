@@ -6,7 +6,7 @@ namespace Chess.Models.Moves
     {
         public override bool IsValid(ChessPiece piece, int newX, int newY, List<ChessPiece> myPieces, List<ChessPiece> opponentPieces)
         {
-            if(piece.Color == PieceColor.White)
+            if(piece.Color == PieceColor.Black)
             {
                 this.YMove *= -1;
             }
