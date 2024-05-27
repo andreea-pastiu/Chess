@@ -11,6 +11,7 @@ namespace Chess.Models
         public Player(int id, PieceColor pieceColor)
         {
             this.Id = id;
+            this.Color = pieceColor;
             this.Pieces = new List<ChessPiece>
             {
                 new Rook(pieceColor == PieceColor.White ? 0 : 16, 0, pieceColor == PieceColor.White ? 0 : 7, pieceColor),

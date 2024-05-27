@@ -23,36 +23,30 @@ namespace Chess.Models.Moves
                 int checkedY = piece.Y + (this.YMove * multiplier);
                 if (checkedX < 0 || checkedX > 7 || checkedY < 0 || checkedY > 7)
                 {
-                    continue;
+                    return false;
                 }
-                if(checkedX != newX || checkedY != newY)
+                if (checkedX != newX || checkedY != newY)
                 {
-                    // we only do this check if we can move multiple spaces
-                    if (this.AllowedMultipliers.Any(x => x != 1 && x != -1))
+                    // check that no piece is blocking the move
+                    if (myPieces.Any(x => x.X == checkedX && x.Y == checkedY)
+                        || opponentPieces.Any(x => x.X == checkedX && x.Y == checkedY))
                     {
-                        // check that no piece is blocking the move
-                        if (myPieces.Any(x => x.Id != piece.Id && x.X == checkedX && x.Y == checkedY)
-                            || opponentPieces.Any(x => x.X == checkedX && x.Y == checkedY))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
                 else
                 {
                     //check that no player piece already occupies the position
-                    if (myPieces.Any(x => x.Id != piece.Id && x.X == checkedX && x.Y == checkedY))
+                    if (myPieces.Any(x => x.X == checkedX && x.Y == checkedY))
                     {
-                        isValid = false;
-                        break;
+                        return false;
                     }
                     else
                     {
                         var existingOpponent = opponentPieces.Any(x => x.X == checkedX && x.Y == checkedY);
-                        if(MustCapture && !existingOpponent)
+                        if (MustCapture && !existingOpponent)
                         {
-                            isValid = false;
-                            break;
+                            return false;
                         }
                         return true;
                     }

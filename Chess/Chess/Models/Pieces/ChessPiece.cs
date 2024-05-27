@@ -26,7 +26,7 @@ namespace Chess.Models.Pieces
             List<ChessPiece> opponentPieces)
         {
             var allowedMove = this.AllowedMoves.Any(x => x.IsValid(this, newX, newY, myPieces, opponentPieces));
-            if(allowedMove)
+            if(!allowedMove)
             {
                 throw new MoveNotAllowedException("Illegal move");
             }

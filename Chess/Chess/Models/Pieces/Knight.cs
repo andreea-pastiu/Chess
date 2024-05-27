@@ -13,30 +13,58 @@ namespace Chess.Models.Pieces
                 {
                     XMove = 2,
                     YMove = 1,
-                    AllowedMultipliers = new List<int>{ -1, 1},
+                    AllowedMultipliers = new List<int>{1},
+                    MustCapture = false
+                },
+                new BaseMove
+                {
+                    XMove = 2,
+                    YMove = 1,
+                    AllowedMultipliers = new List<int>{-1},
                     MustCapture = false
                 },
                 new BaseMove
                 {
                     XMove = -2,
                     YMove = 1,
-                    AllowedMultipliers = new List<int>{ -1, 1},
+                    AllowedMultipliers = new List<int>{1},
+                    MustCapture = false
+                },
+                new BaseMove
+                {
+                    XMove = -2,
+                    YMove = 1,
+                    AllowedMultipliers = new List<int>{-1},
                     MustCapture = false
                 },
                 new BaseMove
                 {
                     XMove = 1,
                     YMove = 2,
-                    AllowedMultipliers = new List<int>{ -1, 1},
+                    AllowedMultipliers = new List<int>{1},
+                    MustCapture = false
+                },
+                new BaseMove
+                {
+                    XMove = 1,
+                    YMove = 2,
+                    AllowedMultipliers = new List<int>{-1},
                     MustCapture = false
                 },
                 new BaseMove
                 {
                     XMove = -1,
                     YMove = 2,
-                    AllowedMultipliers = new List<int>{ -1, 1},
+                    AllowedMultipliers = new List<int>{1},
                     MustCapture = false
                 },
+                new BaseMove
+                {
+                    XMove = -1,
+                    YMove = 2,
+                    AllowedMultipliers = new List<int>{-1},
+                    MustCapture = false
+                }
             };
         }
     }
